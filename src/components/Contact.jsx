@@ -175,36 +175,36 @@ export default function Contact() {
                   target="_blank"
                   rel="noopener noreferrer"
                   id="contact-github"
-                  className="flex h-20 w-20 items-center justify-center rounded-2xl border border-light-text/20 dark:border-dark-text/20 md:border-light-text/8 md:dark:border-dark-text/8 bg-white dark:bg-zinc-900 text-black dark:text-white transition-all duration-300 hover:border-light-text dark:hover:border-dark-text hover:text-light-text dark:hover:text-dark-text hover:scale-110 active:scale-110"
+                  className="flex h-14 w-14 items-center justify-center rounded-2xl border border-light-text/20 dark:border-dark-text/20 md:border-light-text/8 md:dark:border-dark-text/8 bg-white dark:bg-zinc-900 text-black dark:text-white transition-all duration-300 hover:border-light-text dark:hover:border-dark-text hover:text-light-text dark:hover:text-dark-text hover:scale-110 active:scale-110"
                 >
-                  <GithubIcon size={40} />
+                  <GithubIcon size={26} />
                 </a>
                 <a
                   href="https://linkedin.com/in/sidhaya-katoch247"
                   target="_blank"
                   rel="noopener noreferrer"
                   id="contact-linkedin"
-                  className="flex h-20 w-20 items-center justify-center rounded-2xl border-black/10 dark:border-white/10 md:border-light-text/8 md:dark:border-dark-text/8 border bg-white dark:bg-zinc-900 text-[#0077B5] sm:text-black sm:dark:text-white transition-all duration-300 hover:border-[#0077B5] hover:text-[#0077B5] hover:scale-110 active:scale-110"
+                  className="flex h-14 w-14 items-center justify-center rounded-2xl border-black/10 dark:border-white/10 md:border-light-text/8 md:dark:border-dark-text/8 border bg-white dark:bg-zinc-900 text-[#0077B5] sm:text-black sm:dark:text-white transition-all duration-300 hover:border-[#0077B5] hover:text-[#0077B5] hover:scale-110 active:scale-110"
                 >
-                  <LinkedinIcon size={40} />
+                  <LinkedinIcon size={26} />
                 </a>
                 <a
                   href="https://t.me/SIDDD247"
                   target="_blank"
                   rel="noopener noreferrer"
                   id="contact-telegram"
-                  className="flex h-20 w-20 items-center justify-center rounded-2xl border-black/10 dark:border-white/10 md:border-light-text/8 md:dark:border-dark-text/8 border bg-white dark:bg-zinc-900 text-[#2AABEE] sm:text-black sm:dark:text-white transition-all duration-300 hover:border-[#2AABEE] hover:text-[#2AABEE] hover:scale-110 active:scale-110"
+                  className="flex h-14 w-14 items-center justify-center rounded-2xl border-black/10 dark:border-white/10 md:border-light-text/8 md:dark:border-dark-text/8 border bg-white dark:bg-zinc-900 text-[#2AABEE] sm:text-black sm:dark:text-white transition-all duration-300 hover:border-[#2AABEE] hover:text-[#2AABEE] hover:scale-110 active:scale-110"
                 >
-                  <TelegramIcon size={40} />
+                  <TelegramIcon size={26} />
                 </a>
                 <a
                   href="https://www.instagram.com/sidhaya.katoch/"
                   target="_blank"
                   rel="noopener noreferrer"
                   id="contact-instagram"
-                  className="flex h-20 w-20 items-center justify-center rounded-2xl border-black/10 dark:border-white/10 md:border-light-text/8 md:dark:border-dark-text/8 border bg-white dark:bg-zinc-900 text-[#E1306C] sm:text-black sm:dark:text-white transition-all duration-300 hover:border-[#E1306C] hover:text-[#E1306C] hover:scale-110 active:scale-110"
+                  className="flex h-14 w-14 items-center justify-center rounded-2xl border-black/10 dark:border-white/10 md:border-light-text/8 md:dark:border-dark-text/8 border bg-white dark:bg-zinc-900 text-[#E1306C] sm:text-black sm:dark:text-white transition-all duration-300 hover:border-[#E1306C] hover:text-[#E1306C] hover:scale-110 active:scale-110"
                 >
-                  <InstagramIcon size={40} />
+                  <InstagramIcon size={26} />
                 </a>
               </div>
             </motion.div>

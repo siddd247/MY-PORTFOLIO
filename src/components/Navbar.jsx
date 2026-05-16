@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
+import { motion } from "framer-motion";
 import { NavLink, Link, useLocation } from "react-router-dom";
 import { useTheme } from "../hooks/useTheme";
 import { useVideo } from "../context/VideoContext";
@@ -55,27 +55,25 @@ export default function Navbar() {
 
   return (
     <>
-      <LayoutGroup>
         {/* Pill container — always rendered, positions itself */}
         <motion.div
-          layout
-          layoutId="navbar-pill"
           style={{
             backdropFilter: isExpanded ? "none" : "blur(20px) saturate(200%)",
             WebkitBackdropFilter: isExpanded ? "none" : "blur(20px) saturate(200%)",
             background: isExpanded ? "transparent" : "rgba(255,255,255,0.06)",
             border: isExpanded ? "1px solid transparent" : "1px solid rgba(255,255,255,0.12)",
             boxShadow: isExpanded ? "none" : "0 2px 32px rgba(0,0,0,0.08)",
+            willChange: "transform",
           }}
           className={`fixed z-50 top-6 transition-colors duration-500
             ${isExpanded
-              ? "left-8 right-8 rounded-none bg-transparent flex items-center justify-between"
-              : "left-0 right-0 mx-auto w-[90%] md:w-max max-w-4xl rounded-full flex items-center justify-between md:justify-center gap-4 md:gap-8 px-5 py-3 md:px-8 md:py-3.5"
+              ? "left-4 right-4 rounded-none bg-transparent flex items-center justify-between"
+              : "left-0 right-0 mx-auto w-[92%] md:w-max max-w-4xl rounded-full flex items-center justify-between md:justify-center gap-2 md:gap-8 px-3 py-2.5 md:px-8 md:py-3.5"
             }`}
-          transition={{ type: "spring", stiffness: 130, damping: 22, mass: 0.8 }}
+          transition={{ type: "spring", stiffness: 260, damping: 28, mass: 0.4 }}
         >
           {/* Wordmark — slides from left to center-left */}
-          <motion.div layout layoutId="navbar-wordmark">
+          <motion.div>
             <Link
               to="/"
               className={`font-normal tracking-[-0.02em] text-lg md:text-xl whitespace-nowrap transition-colors duration-700 ${videoPlaying && isDarkMode ? "text-black" : "text-light-text dark:text-dark-text"}`}
@@ -99,8 +97,6 @@ export default function Navbar() {
 
           {/* Nav links — visible on desktop, centered when expanded */}
           <motion.ul
-            layout
-            layoutId="navbar-links"
             className={`items-center gap-8
               ${isExpanded
                 ? "hidden md:flex absolute left-1/2 -translate-x-1/2"
@@ -128,10 +124,10 @@ export default function Navbar() {
           </motion.ul>
 
           {/* Right buttons — slides from right to center-right */}
-          <motion.div layout layoutId="navbar-buttons" className="flex items-center gap-2 md:gap-4">
+          <motion.div className="flex items-center gap-2 md:gap-4">
             <Link
               to="/contact"
-              className="inline-flex items-center gap-1.5 rounded-full purple-gradient-border font-semibold text-light-text dark:text-dark-text transition-all duration-300 hover:shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:scale-[1.03] active:scale-[0.97] px-4 py-2 md:px-6 md:py-2.5 text-xs md:text-base"
+              className="inline-flex items-center gap-1.5 rounded-full purple-gradient-border font-semibold text-light-text dark:text-dark-text transition-all duration-300 hover:shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:scale-[1.03] active:scale-[0.97] px-3 py-1.5 md:px-6 md:py-2.5 text-xs md:text-base"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3.5 h-3.5 md:w-4 md:h-4"><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg>
               <span className="hidden sm:inline">Let&rsquo;s Talk</span>
@@ -142,7 +138,7 @@ export default function Navbar() {
               role="switch"
               aria-checked={isDarkMode}
               aria-label="Toggle Dark Mode"
-              className="relative flex items-center justify-between px-1.5 md:px-2 rounded-full focus:outline-none glass cursor-pointer transition-all duration-300 h-8 w-14 md:h-9 md:w-18"
+              className="relative flex items-center justify-between px-1.5 md:px-2 rounded-full focus:outline-none glass cursor-pointer transition-all duration-300 h-8 w-14 md:h-9 md:w-[72px]"
             >
               <svg className="h-3 w-3 md:h-4 md:w-4 text-gray-500 z-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -154,24 +150,18 @@ export default function Navbar() {
             </button>
           </motion.div>
         </motion.div>
-      </LayoutGroup>
 
       {/* Floating Navigation Dock (Mobile Only) */}
-      <AnimatePresence>
-        {showDock && (
-          <motion.div
-            initial={{ y: 20, opacity: 0, scale: 0.95 }}
-            animate={{ y: 0, opacity: 1, scale: 1 }}
-            exit={{ y: 20, opacity: 0, scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 200, damping: 25, mass: 0.9 }}
-            className={`fixed left-0 right-0 mx-auto w-[90%] z-40 md:hidden ${isHome ? "bottom-[72px]" : "bottom-8"}`}
-          >
-            <div className="flex justify-center w-full">
-              <FloatingDockMobile items={mobileNavLinks} />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <motion.div
+        animate={{ opacity: showDock ? 1 : 0 }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
+        style={{ pointerEvents: showDock ? "auto" : "none", transform: "translateZ(0)", WebkitTransform: "translateZ(0)" }}
+        className={`fixed left-0 right-0 mx-auto w-[88%] z-40 md:hidden ${isHome ? "bottom-[72px]" : "bottom-8"}`}
+      >
+        <div className="flex justify-center w-full">
+          <FloatingDockMobile items={mobileNavLinks} />
+        </div>
+      </motion.div>
     </>
   );
 }

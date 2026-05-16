@@ -38,6 +38,10 @@ function SquiggleName({ children }) {
     const target = () => (hovered ? 1 : 0);
 
     function frame() {
+      if (scaleRef.current < 0.005 && !hovered) {
+        rafRef.current = requestAnimationFrame(frame);
+        return;
+      }
       t += 0.016;
       // lerp towards target
       scaleRef.current = lerp(scaleRef.current, target(), 0.12);
@@ -134,7 +138,7 @@ function SquiggleName({ children }) {
 const container = {
   hidden: {},
   show: {
-    transition: { staggerChildren: 0.15, delayChildren: 0.3 },
+    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
   },
 };
 
@@ -184,7 +188,7 @@ export default function Hero({ onTrigger }) {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  const springConfig = { stiffness: 80, damping: 20 };
+  const springConfig = { stiffness: 120, damping: 18 };
   const springX = useSpring(mouseX, springConfig);
   const springY = useSpring(mouseY, springConfig);
 
@@ -192,7 +196,7 @@ export default function Hero({ onTrigger }) {
   const bgY = useTransform(springY, [-0.5, 0.5], [15, -15]);
 
   const handleMouseMove = (e) => {
-    if (isLeaving) return;
+    if (isLeaving || isMobile) return;
     const { clientX, clientY, currentTarget } = e;
     const { width, height } = currentTarget.getBoundingClientRect();
     const x = (clientX / width) - 0.5;

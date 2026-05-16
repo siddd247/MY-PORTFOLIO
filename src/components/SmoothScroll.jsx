@@ -1,11 +1,11 @@
-import { useEffect, ReactNode } from "react";
+import { useEffect } from "react";
 import Lenis from "lenis";
 
-/**
- * Global smooth scroll component using Lenis.
- */
 export default function SmoothScroll({ children }) {
   useEffect(() => {
+    const isMobile = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+    if (isMobile) return; // native scroll on touch devices
+
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -24,13 +24,9 @@ export default function SmoothScroll({ children }) {
     }
 
     requestAnimationFrame(raf);
-
-    // Make lenis available globally for convenience
     window.lenis = lenis;
 
-    return () => {
-      lenis.destroy();
-    };
+    return () => lenis.destroy();
   }, []);
 
   return <>{children}</>;
