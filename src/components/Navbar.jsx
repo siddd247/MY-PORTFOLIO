@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, LayoutGroup } from "framer-motion";
 import { NavLink, Link, useLocation } from "react-router-dom";
 import { useTheme } from "../hooks/useTheme";
 import { useVideo } from "../context/VideoContext";
@@ -15,11 +15,12 @@ const NAV_LINKS = [
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
-  const { videoPlaying } = useVideo();
+  const { videoPlaying, setVideoPlaying } = useVideo();
   const isDarkMode = theme === "dark";
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [showDock, setShowDock] = useState(false);
+  const [visuallyExpanded, setVisuallyExpanded] = useState(location.pathname === "/" && window.scrollY < 40);
 
   const mobileNavLinks = [
     { title: "Work", icon: <IconTerminal2 className="h-full w-full text-black dark:text-white" />, href: "/work" },
@@ -48,22 +49,32 @@ export default function Navbar() {
   // Close dock on route change
   useEffect(() => {
     setShowDock(false);
-  }, [location.pathname]);
+    setVideoPlaying(false);
+  }, [location.pathname, setVideoPlaying]);
 
   const isHome = location.pathname === "/";
   const isExpanded = isHome && !scrolled;
 
+  useEffect(() => {
+    const timer = setTimeout(() => setVisuallyExpanded(isExpanded), isExpanded ? 0 : 10);
+    return () => clearTimeout(timer);
+  }, [isExpanded]);
+
   return (
     <>
+      <LayoutGroup>
         {/* Pill container — always rendered, positions itself */}
         <motion.div
+          layout
+          layoutId="navbar-pill"
           style={{
-            backdropFilter: isExpanded ? "none" : "blur(20px) saturate(200%)",
-            WebkitBackdropFilter: isExpanded ? "none" : "blur(20px) saturate(200%)",
-            background: isExpanded ? "transparent" : "rgba(255,255,255,0.06)",
-            border: isExpanded ? "1px solid transparent" : "1px solid rgba(255,255,255,0.12)",
-            boxShadow: isExpanded ? "none" : "0 2px 32px rgba(0,0,0,0.08)",
+            backdropFilter: visuallyExpanded ? "none" : "blur(20px) saturate(200%)",
+            WebkitBackdropFilter: visuallyExpanded ? "none" : "blur(20px) saturate(200%)",
+            background: visuallyExpanded ? "transparent" : "rgba(255,255,255,0.06)",
+            border: visuallyExpanded ? "1px solid transparent" : "1px solid rgba(255,255,255,0.12)",
+            boxShadow: visuallyExpanded ? "none" : "0 2px 32px rgba(0,0,0,0.08)",
             willChange: "transform",
+            transition: "background 0.5s ease, border 0.5s ease, backdrop-filter 0.5s ease",
           }}
           className={`fixed z-50 top-6 transition-colors duration-500
             ${isExpanded
@@ -73,7 +84,7 @@ export default function Navbar() {
           transition={{ type: "spring", stiffness: 260, damping: 28, mass: 0.4 }}
         >
           {/* Wordmark — slides from left to center-left */}
-          <motion.div>
+          <motion.div layout layoutId="navbar-wordmark">
             <Link
               to="/"
               className={`font-normal tracking-[-0.02em] text-lg md:text-xl whitespace-nowrap transition-colors duration-700 ${videoPlaying && isDarkMode ? "text-black" : "text-light-text dark:text-dark-text"}`}
@@ -97,6 +108,8 @@ export default function Navbar() {
 
           {/* Nav links — visible on desktop, centered when expanded */}
           <motion.ul
+            layout
+            layoutId="navbar-links"
             className={`items-center gap-8
               ${isExpanded
                 ? "hidden md:flex absolute left-1/2 -translate-x-1/2"
@@ -124,7 +137,7 @@ export default function Navbar() {
           </motion.ul>
 
           {/* Right buttons — slides from right to center-right */}
-          <motion.div className="flex items-center gap-2 md:gap-4">
+          <motion.div layout layoutId="navbar-buttons" className="flex items-center gap-2 md:gap-4">
             <Link
               to="/contact"
               className="inline-flex items-center gap-1.5 rounded-full purple-gradient-border font-semibold text-light-text dark:text-dark-text transition-all duration-300 hover:shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:scale-[1.03] active:scale-[0.97] px-3 py-1.5 md:px-6 md:py-2.5 text-xs md:text-base"
@@ -150,6 +163,7 @@ export default function Navbar() {
             </button>
           </motion.div>
         </motion.div>
+      </LayoutGroup>
 
       {/* Floating Navigation Dock (Mobile Only) */}
       <motion.div

@@ -6,19 +6,18 @@ import { Link } from "react-router-dom";
 import { HoverBorderGradient } from "./ui/hover-border-gradient";
 import { PROJECTS } from "../data/projects";
 
-const SPRING = { type: "spring", stiffness: 140, damping: 22, mass: 0.8 };
+const isMobile = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+const SPRING = isMobile
+  ? { type: "tween", duration: 0.25, ease: "easeOut" }
+  : { type: "spring", stiffness: 140, damping: 22, mass: 0.8 };
 
 export default function Projects() {
   const [index, setIndex] = useState(0);
   const [loaded, setLoaded] = useState({});
   const containerRef = useRef(null);
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
-
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start end", "end start"] });
+  const bgY = useTransform(scrollYProgress, [0, 1], isMobile ? ["0%", "0%"] : ["0%", "30%"]);
 
   const next = () => setIndex((p) => (p + 1) % PROJECTS.length);
   const prev = () => setIndex((p) => (p - 1 + PROJECTS.length) % PROJECTS.length);
@@ -119,23 +118,32 @@ export default function Projects() {
                             <div className="w-10 h-10 rounded-full border-2 border-white/10 border-t-accent animate-spin" />
                           </div>
                         )}
-                        <iframe
-                          src={project.url}
-                          onLoad={() => setLoaded((p) => ({ ...p, [i]: true }))}
-                          title={project.title}
-                          loading="lazy"
-                          sandbox="allow-scripts allow-same-origin"
-                          style={{
-                            pointerEvents: "none",
-                            width: "200%",
-                            height: "200%",
-                            border: "none",
-                            transformOrigin: "top left",
-                            transform: "scale(0.5)",
-                            opacity: loaded[i] ? 1 : 0,
-                            transition: "opacity 0.4s ease",
-                          }}
-                        />
+                        {isMobile ? (
+                          <img
+                            src={project.preview}
+                            alt={project.title}
+                            onLoad={() => setLoaded((p) => ({ ...p, [i]: true }))}
+                            style={{ width: "100%", height: "100%", objectFit: "cover", opacity: loaded[i] ? 1 : 0, transition: "opacity 0.3s ease" }}
+                          />
+                        ) : (
+                          <iframe
+                            src={project.url}
+                            onLoad={() => setLoaded((p) => ({ ...p, [i]: true }))}
+                            title={project.title}
+                            loading="lazy"
+                            sandbox="allow-scripts allow-same-origin"
+                            style={{
+                              pointerEvents: "none",
+                              width: "200%",
+                              height: "200%",
+                              border: "none",
+                              transformOrigin: "top left",
+                              transform: "scale(0.5)",
+                              opacity: loaded[i] ? 1 : 0,
+                              transition: "opacity 0.4s ease",
+                            }}
+                          />
+                        )}
                         <div className="absolute inset-0 z-10" />
                       </div>
                     </div>
